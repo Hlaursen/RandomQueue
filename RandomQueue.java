@@ -11,11 +11,12 @@ import edu.princeton.cs.algs4.StdStats;
 public class RandomQueue<Item> implements Iterable<Item> {
   // Your code goes here.
   // Mine takes ca. 60 lines, my longest method has 5 lines.
-    private ArrayList<Item> myArray;
+    //private ArrayList<Item> myArray;
+    private Item[] myArray;
     int size;
 
     public RandomQueue() { // create an empty random queue
-      myArray = new ArrayList<Item>();
+      myArray = (Item[]) new Object[2];
       size = 0;
 
     }
@@ -26,30 +27,51 @@ public class RandomQueue<Item> implements Iterable<Item> {
       return(this.size);
     }
     public void enqueue(Item item) {// add an item
-      myArray.add(item);
+      if (size == myArray.length) resize(2*myArray.length);    // double size of array if necessary
+      myArray[size] = item;
       size++;
     }
+
+    private void resize(int capacity) {
+       assert capacity >= size;
+       Item[] temp = (Item[]) new Object[capacity];
+       for (int i = 0; i < size; i++) {
+           temp[i] = myArray[i];
+       }
+       myArray = temp;
+   }
+
     public Item sample(){ // return (but do not remove) a random item
       int x = StdRandom.uniform(0, this.size);
-      return(myArray.get(x));
+      return(myArray[x]);
     }
+
     public Item dequeue(){ // remove and return a random item
       int x = StdRandom.uniform(0, this.size);
+      if (isEmpty()) throw new NoSuchElementException("Stack underflow");
+      Item item = myArray[x];
+      if(size > 1) {
+        myArray[x] = null;
+        myArray[x] = myArray[size-1];
+        myArray[size-1] = null;
+      }
+
+      else myArray[x] = null;
       size--;
-      return(myArray.remove(x));
+      // shrink size of array if necessary
+      if (size > 0 && size == myArray.length/4) resize(myArray.length/2);
+      return(item);
     }
     public Iterator<Item> iterator() { // return an iterator over the items in random order
         return new RandomQueueIterator();
     }
     private class RandomQueueIterator implements Iterator<Item> {
-        private int i = 0;
+        private int i;
         Item[] random;
         public RandomQueueIterator() {
-          random = (Item[]) new Object[size];
-            for(int j = 0; j < size; j++) {
-              random[j] = myArray.get(j);
-            }
-            StdRandom.shuffle(random);
+          i = 0;
+          random = myArray;
+          StdRandom.shuffle(random);
           }
         public boolean hasNext()  {return(i < size);}
         public void remove()      { throw new UnsupportedOperationException();  }
