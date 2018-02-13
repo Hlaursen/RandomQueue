@@ -16,7 +16,7 @@ public class RandomQueue<Item> implements Iterable<Item> {
 
     public RandomQueue() { // create an empty random queue
       myArray = new ArrayList<Item>();
-      size = myArray.size();
+      size = 0;
 
     }
     public boolean isEmpty() {// is it empty?
@@ -35,7 +35,6 @@ public class RandomQueue<Item> implements Iterable<Item> {
     }
     public Item dequeue(){ // remove and return a random item
       int x = StdRandom.uniform(0, this.size);
-      //StdOut.print("size "+ size +". " );
       size--;
       return(myArray.remove(x));
     }
@@ -43,15 +42,16 @@ public class RandomQueue<Item> implements Iterable<Item> {
         return new RandomQueueIterator();
     }
     private class RandomQueueIterator implements Iterator<Item> {
-      private int i = size;
-      Item[] random = (Item[]) new Object[size];
+        private int i = 0;
+        Item[] random;
         public RandomQueueIterator() {
-          for(int j = 0; j > size; i++) {
-             random[j] = myArray.get(i);
-           }
-           StdRandom.shuffle(random);
-        }
-        public boolean hasNext()  {return(i > 0);}
+          random = (Item[]) new Object[size];
+            for(int j = 0; j > size; j++) {
+              random[j] = myArray.get(j);
+            }
+            StdRandom.shuffle(random);
+          }
+        public boolean hasNext()  {return(i < size);}
         public void remove()      { throw new UnsupportedOperationException();  }
         public Item next() {
             if (!hasNext()) throw new NoSuchElementException();
