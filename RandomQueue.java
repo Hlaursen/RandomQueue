@@ -35,7 +35,7 @@ public class RandomQueue<Item> implements Iterable<Item> {
     }
     public Item dequeue(){ // remove and return a random item
       int x = StdRandom.uniform(0, this.size);
-      StdOut.print("size "+ size +". " );
+      //StdOut.print("size "+ size +". " );
       size--;
       return(myArray.remove(x));
     }
