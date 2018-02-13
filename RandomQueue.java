@@ -46,7 +46,7 @@ public class RandomQueue<Item> implements Iterable<Item> {
         Item[] random;
         public RandomQueueIterator() {
           random = (Item[]) new Object[size];
-            for(int j = 0; j > size; j++) {
+            for(int j = 0; j < size; j++) {
               random[j] = myArray.get(j);
             }
             StdRandom.shuffle(random);
