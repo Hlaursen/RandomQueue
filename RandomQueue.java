@@ -23,6 +23,7 @@ public class RandomQueue<Item> implements Iterable<Item> {
     public boolean isEmpty() {// is it empty?
       return(this.size == 0);
     }
+
     public int size() {// return the number of elements
       return(this.size);
     }
@@ -56,7 +57,7 @@ public class RandomQueue<Item> implements Iterable<Item> {
         myArray[size-1] = null;
       }
 
-      else myArray[x] = null;
+      else myArray[x] = null; // If there is only one element left
       size--;
       // shrink size of array if necessary
       if (size > 0 && size == myArray.length/4) resize(myArray.length/2);
@@ -70,14 +71,26 @@ public class RandomQueue<Item> implements Iterable<Item> {
         Item[] random;
         public RandomQueueIterator() {
           i = 0;
-          random = myArray;
+          random = (Item[]) new Object[size];
+          for (int m=0; m<size; m++)
+          {
+            random[m] = myArray[m];
+          }
           StdRandom.shuffle(random);
           }
+        /*public void copyArray()
+        {
+          for (int i=0; i<size; i++)
+          {
+            random[i] = myArray[i];
+          }
+        }*/
         public boolean hasNext()  {return(i < size);}
         public void remove()      { throw new UnsupportedOperationException();  }
         public Item next() {
             if (!hasNext()) throw new NoSuchElementException();
             return(random[i++]);
+
         }
     }
 
